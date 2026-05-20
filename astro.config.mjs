@@ -1,5 +1,7 @@
+// astro.config.mjs
 // @ts-check
 import { defineConfig } from "astro/config";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   site: "https://ryodgie.com",
@@ -8,7 +10,7 @@ export default defineConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "src/styles/tokens" as *;`,
+          additionalData: `@use "${fileURLToPath(new URL("./src/styles/tokens.scss", import.meta.url))}" as *;`,
         },
       },
     },

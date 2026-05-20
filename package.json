@@ -16,5 +16,8 @@
     "@fontsource/dm-sans": "^5.2.8",
     "astro": "^6.3.5",
     "sass": "^1.99.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1"
   }
 }
