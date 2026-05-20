@@ -5,13 +5,14 @@ import '@fontsource/dm-sans/500.css';
 import '@fontsource/dm-mono/400.css';
 import '@fontsource/dm-mono/500.css';
 import '../styles/typography.scss';
+import '../styles/global.scss';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack Developer specializing in Front-end Development.' } = Astro.props;
+const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack Developer.' } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,6 +26,20 @@ const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack 
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div class="page">
+      <slot />
+    </div>
   </body>
 </html>
+
+<style lang="scss">
+  .page {
+    max-width: $max-main;
+    margin: 0 auto;
+    padding: $space-l 24px;
+
+    @media (min-width: 640px) {
+      padding: $space-l;
+    }
+  }
+</style>
