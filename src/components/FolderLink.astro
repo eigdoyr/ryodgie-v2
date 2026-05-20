@@ -15,22 +15,16 @@ const { href, label } = Astro.props;
 </a>
 
 <style lang="scss">
-  .folder-link {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-xs;
-    font-family: $font-mono;
-    font-size: $text-sm;
-    color: $color-text;
-    transition: color 0.2s ease;
+.folder-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  font-family: $font-mono;
+  font-size: $text-sm;
+}
 
-    &:hover {
-      color: $color-accent;
-    }
-  }
-
-  .icon {
-    color: $color-accent;
-    display: inline-flex;
-  }
+.icon {
+  color: $color-accent;
+  display: inline-flex;
+}
 </style>

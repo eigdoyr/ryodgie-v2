@@ -13,6 +13,12 @@ $leading-normal: 1.5;
 $max-main: 592px;
 $max-heading: 386px;
 
+// Breakpoints
+// Above this width AND height, content vertical-centers in viewport.
+// Below either, it pins to top with padding for safe scrolling.
+$bp-center: 629px;
+$bp-tall: 687px;
+
 // Spacing
 $space-l: 48px;
 $space-m: 32px;
@@ -28,3 +34,6 @@ $color-accent: #9affbf;
 // Font weights
 $weight-regular: 400;
 $weight-medium: 500;
+
+// Transitions
+$transition-fast: 0.2s ease;

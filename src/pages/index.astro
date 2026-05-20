@@ -43,25 +43,17 @@ const socials = [
     margin-top: $space-s;
   }
 
-  .about {
-    margin-top: $space-l;
-    color: $color-text-muted;
-    font-family: $font-sans;
-    font-size: $text-base;
-    line-height: $leading-normal;
+.about {
+  margin-top: $space-l;
+  color: $color-text-muted;
+  font-family: $font-sans;
+  font-size: $text-base;
+  line-height: $leading-normal;
 
-    :global(p + p) {
-      margin-top: $space-s;
-    }
-
-    :global(a) {
-      color: $color-text;
-
-      &:hover {
-        color: $color-accent;
-      }
-    }
+  > :global(p) + :global(p) {
+    margin-top: $space-s;
   }
+}
 
   .folders {
     margin-top: $space-l;

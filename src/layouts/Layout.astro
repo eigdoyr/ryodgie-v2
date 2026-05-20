@@ -37,29 +37,26 @@ const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack 
   .layout {
   min-height: 100vh;
   padding: $space-l 24px;
+
+  // Short viewports — extra bottom room so content doesn't pin to edge
+  @media (max-height: #{$bp-tall - 1px}) {
+    padding-bottom: $space-l * 2;
+  }
+
+  // Tall + wide enough — flex-center the content vertically
+  @media (min-width: $bp-center) and (min-height: $bp-tall) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .page {
   width: 100%;
   max-width: $max-main;
   margin: 0 auto;
-}
 
-// Short viewports — give bottom more room
-@media (max-height: 686px) {
-  .layout {
-    padding-top: $space-l;
-    padding-bottom: $space-l * 2;
-  }
-}
-
-@media (min-width: 629px) and (min-height: 687px) {
-  .layout {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .page {
+  @media (min-width: $bp-center) and (min-height: $bp-tall) {
     margin: 0;
   }
 }
