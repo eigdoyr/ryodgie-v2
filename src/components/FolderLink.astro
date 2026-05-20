@@ -1,0 +1,36 @@
+---
+import FolderIcon from './icons/FolderIcon.astro';
+
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<a href={href} class="folder-link">
+  <span class="icon"><FolderIcon /></span>
+  <span class="label">{label}</span>
+</a>
+
+<style lang="scss">
+  .folder-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-xs;
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  .icon {
+    color: $color-accent;
+    display: inline-flex;
+  }
+</style>
