@@ -1,0 +1,37 @@
+---
+interface Props {
+  src?: string;
+  alt?: string;
+  size?: number;
+}
+
+const { src, alt = 'Ryodgie Barnatia', size = 50 } = Astro.props;
+---
+
+<div class="avatar" style={`--size: ${size}px;`}>
+  {src ? <img src={src} alt={alt} width={size} height={size} /> : <span aria-hidden="true">R</span>}
+</div>
+
+<style lang="scss">
+  .avatar {
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    overflow: hidden;
+    background: $color-text-muted;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: $color-background;
+    font-family: $font-mono;
+    font-weight: $weight-medium;
+    font-size: $text-sm;
+    user-select: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
