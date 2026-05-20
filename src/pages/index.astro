@@ -1,8 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Avatar from '../components/Avatar.astro';
+import Header from '../components/Header.astro';
 ---
 
 <Layout title="Ryodgie Barnatia">
   <Avatar />
+  <Header
+    name="Ryodgie Barnatia"
+    role="Web / UI Designer & Full-stack Developer specializing in front-end development."
+  />
 </Layout>
+
+<style lang="scss">
+  :global(.page) > * + * {
+    margin-top: $space-m;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+interface Props {
+  name: string;
+  role: string;
+}
+
+const { name, role } = Astro.props;
+---
+
+<header class="header">
+  <h1>
+    <span class="name">{name}</span>
+    <span class="separator" aria-hidden="true"> - </span>
+    <span class="role">{role}</span>
+  </h1>
+</header>
+
+<style lang="scss">
+  .header {
+  max-width: $max-heading;
+}
+
+h1 {
+  font-family: $font-mono;
+  font-size: $text-base;
+  font-weight: $weight-medium;
+  line-height: $leading-normal;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: $color-text;
+}
+
+</style>
