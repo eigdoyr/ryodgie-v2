@@ -26,20 +26,41 @@ const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack 
     <title>{title}</title>
   </head>
   <body>
+  <main class="layout">
     <div class="page">
       <slot />
     </div>
-  </body>
-</html>
+  </main>
+</body>
 
 <style lang="scss">
-  .page {
+  .layout {
+  min-height: 100vh;
+  padding: $space-l 24px;
+}
+
+.page {
+  width: 100%;
   max-width: $max-main;
   margin: 0 auto;
-  padding: $space-l 24px;
+}
 
-  @media (min-width: 640px) {
-    padding: $space-l;
+// Short viewports — give bottom more room
+@media (max-height: 686px) {
+  .layout {
+    padding-top: $space-l;
+    padding-bottom: $space-l * 2;
+  }
+}
+
+@media (min-width: 629px) and (min-height: 687px) {
+  .layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page {
+    margin: 0;
   }
 }
 </style>
