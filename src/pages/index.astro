@@ -1,19 +1,61 @@
 ---
+import { getEntry, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Avatar from '../components/Avatar.astro';
 import Header from '../components/Header.astro';
+import FolderLink from '../components/FolderLink.astro';
+
+const about = await getEntry('about', 'index');
+if (!about) throw new Error('About content missing');
+const { Content } = await render(about);
 ---
 
 <Layout title="Ryodgie Barnatia">
   <Avatar />
-  <Header
-    name="Ryodgie Barnatia"
-    role="Web / UI Designer & Full-stack Developer specializing in front-end development."
-  />
+  <div class="header-wrap">
+    <Header
+      name="Ryodgie Barnatia"
+      role="Web / UI Designer & Full-stack Developer specializing in front-end development."
+    />
+  </div>
+  <div class="about">
+    <Content />
+  </div>
+  <nav class="folders">
+    <FolderLink href="/design-archives" label="Design Archives" />
+    <FolderLink href="/playground" label="Playground" />
+  </nav>
 </Layout>
 
 <style lang="scss">
-  :global(.page) > * + * {
-    margin-top: $space-m;
+  .header-wrap {
+    margin-top: $space-s;
+  }
+
+  .about {
+    margin-top: $space-l;
+    color: $color-text-muted;
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
+
+    :global(p + p) {
+      margin-top: $space-s;
+    }
+
+    :global(a) {
+      color: $color-text;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+  }
+
+  .folders {
+    margin-top: $space-l;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
   }
 </style>
