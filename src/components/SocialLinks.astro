@@ -1,0 +1,52 @@
+---
+interface SocialLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  links: SocialLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<ul class="socials">
+  {
+    links.map(({ label, href }) => {
+      const isEmail = href.startsWith('mailto:');
+      return (
+        <li>
+          
+           <a href={href}
+            target={isEmail ? undefined : '_blank'}
+            rel={isEmail ? undefined : 'noopener noreferrer'}
+          >
+            {label}
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style lang="scss">
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-m;
+    list-style: none;
+    padding: 0;
+  }
+
+  a {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+</style>

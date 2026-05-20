@@ -4,10 +4,18 @@ import Layout from '../layouts/Layout.astro';
 import Avatar from '../components/Avatar.astro';
 import Header from '../components/Header.astro';
 import FolderLink from '../components/FolderLink.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 
 const about = await getEntry('about', 'index');
 if (!about) throw new Error('About content missing');
 const { Content } = await render(about);
+
+const socials = [
+  { label: 'Github', href: 'https://github.com/eigdoyr' },
+  { label: 'Dribbble', href: 'https://dribbble.com/ryodgie' },
+  { label: 'Linkedin', href: 'https://www.linkedin.com/in/ryodgie/' },
+  { label: 'Email', href: 'mailto:hello@ryodgie.com' },
+];
 ---
 
 <Layout title="Ryodgie Barnatia">
@@ -25,6 +33,9 @@ const { Content } = await render(about);
     <FolderLink href="/design-archives" label="Design Archives" />
     <FolderLink href="/playground" label="Playground" />
   </nav>
+  <div class="socials-wrap">
+    <SocialLinks links={socials} />
+  </div>
 </Layout>
 
 <style lang="scss">
@@ -57,5 +68,9 @@ const { Content } = await render(about);
     display: flex;
     flex-direction: column;
     gap: $space-xs;
+  }
+
+  .socials-wrap {
+    margin-top: $space-l;
   }
 </style>
