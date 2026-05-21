@@ -43,31 +43,33 @@ const { items, height = 340 } = Astro.props;
 </div>
 
 <style lang="scss">
-  .gallery {
-    width: 100%;
-    height: var(--height);
-    max-height: 60vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+.gallery {
+  width: 100%;
+  height: var(--height);
+  max-height: 60vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 
-    // Hide scrollbar cross-browser
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  // hide scrollbar
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
+}
 
   .track {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: $space-xs;
     list-style: none;
-    padding: 0;
+    padding: 0 24px;
     margin: 0;
     height: 100%;
     width: max-content;
+    min-width: 100%;
   }
 
   .item {

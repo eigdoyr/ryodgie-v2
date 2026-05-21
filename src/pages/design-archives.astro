@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Gallery from '../components/Gallery.astro';
 
@@ -18,6 +19,28 @@ const galleryItems = sorted.map((entry) => ({
 }));
 ---
 
-<Layout title="Design Archives — Ryodgie Barnatia" folderNav="back">
+<Layout title="Design Archives — Ryodgie Barnatia">
   <Gallery slot="gallery" items={galleryItems} />
+
+  <!-- Hidden project data — cloned into the modal by JS -->
+  {
+    sorted.map((entry) => (
+      <template data-project={entry.id}>
+        <div data-project-title>{entry.data.title}</div>
+        <div data-project-desc>{entry.data.description}</div>
+        <div data-project-images>
+          {entry.data.images.map((img) => (
+            <Image
+              src={img}
+              alt={entry.data.title}
+              widths={[600, 1200]}
+              sizes="(max-width: 768px) 90vw, 592px"
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </div>
+      </template>
+    ))
+  }
 </Layout>

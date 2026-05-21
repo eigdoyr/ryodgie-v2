@@ -4,27 +4,36 @@ import FolderIcon from './icons/FolderIcon.astro';
 interface Props {
   href: string;
   label: string;
+  active?: boolean;
 }
 
-const { href, label } = Astro.props;
+const { href, label, active = false } = Astro.props;
 ---
 
-<a href={href} class="folder-link">
+<a href={href} class="folder-link" class:list={[{ active }]}>
   <span class="icon"><FolderIcon /></span>
   <span class="label">{label}</span>
 </a>
 
 <style lang="scss">
-.folder-link {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-xs;
-  font-family: $font-mono;
-  font-size: $text-sm;
-}
+  .folder-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-xs;
+    font-family: $font-mono;
+    font-size: $text-sm;
 
-.icon {
-  color: $color-accent;
-  display: inline-flex;
-}
+    &.active {
+      color: $color-accent;
+
+      .icon {
+        color: $color-accent;
+      }
+    }
+  }
+
+  .icon {
+    color: $color-accent;
+    display: inline-flex;
+  }
 </style>

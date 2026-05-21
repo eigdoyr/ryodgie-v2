@@ -1,0 +1,266 @@
+---
+// Modal shell — content is injected at runtime by JS.
+// Two modes: 'full' (archives) and 'minimal' (playground).
+---
+
+<dialog class="modal" data-modal>
+  <!-- Minimal mode: just an image -->
+  <div class="modal-minimal" data-modal-minimal hidden>
+    <div class="minimal-image" data-modal-minimal-image></div>
+    <p class="minimal-hint">press esc or click anywhere to close</p>
+  </div>
+
+  <!-- Full mode: card with title, description, gallery -->
+  <div class="modal-full" data-modal-full hidden>
+    <div class="card">
+      <header class="card-head">
+        <h2 class="card-title" data-modal-title></h2>
+        <p class="card-desc" data-modal-desc></p>
+      </header>
+
+      <div class="card-gallery">
+        <div class="gallery-viewport" data-modal-gallery></div>
+        <div class="gallery-nav">
+          <button type="button" class="nav-btn" data-modal-prev aria-label="Previous image">
+            &larr;
+          </button>
+          <span class="nav-counter" data-modal-counter></span>
+          <button type="button" class="nav-btn" data-modal-next aria-label="Next image">
+            &rarr;
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="card-back" data-modal-back>
+        Back to Design Archives
+      </button>
+    </div>
+  </div>
+
+  <!-- Universal close (full mode card corner) -->
+  <button type="button" class="modal-close" data-modal-close aria-label="Close">
+    &times;
+  </button>
+</dialog>
+
+<style lang="scss">
+  .modal {
+    // Reset native dialog defaults
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    color: $color-text;
+
+    &::backdrop {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  // ---- Minimal mode ----
+  .modal-minimal {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-m;
+    cursor: pointer;
+  }
+
+  .minimal-image {
+    :global(img) {
+      max-width: 90vw;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  .minimal-hint {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text-muted;
+  }
+
+  // ---- Full mode ----
+  .modal-full {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-l 24px;
+  }
+
+  .card {
+    background: $color-background;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    max-width: $max-main;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: $space-l;
+    display: flex;
+    flex-direction: column;
+    gap: $space-m;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .card-title {
+    font-family: $font-mono;
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .card-desc {
+    margin-top: $space-s;
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
+    color: $color-text-muted;
+  }
+
+  .card-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+  }
+
+  .gallery-viewport {
+    :global(img) {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  .gallery-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-m;
+  }
+
+  .nav-btn {
+    font-family: $font-mono;
+    font-size: $text-base;
+    color: $color-text;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  .nav-counter {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text-muted;
+  }
+
+  .card-back {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text;
+    align-self: flex-start;
+  }
+
+  .modal-close {
+    position: fixed;
+    top: $space-m;
+    right: $space-m;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: $color-text;
+    z-index: 1;
+  }
+</style>
+
+<script>
+  const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
+
+  if (modal) {
+    const fullMode = modal.querySelector<HTMLElement>('[data-modal-full]');
+    const minimalMode = modal.querySelector<HTMLElement>('[data-modal-minimal]');
+    const titleEl = modal.querySelector<HTMLElement>('[data-modal-title]');
+    const descEl = modal.querySelector<HTMLElement>('[data-modal-desc]');
+    const galleryEl = modal.querySelector<HTMLElement>('[data-modal-gallery]');
+    const minimalImageEl = modal.querySelector<HTMLElement>('[data-modal-minimal-image]');
+
+    const openFull = (projectId: string) => {
+      const tpl = document.querySelector<HTMLTemplateElement>(
+        `template[data-project="${projectId}"]`
+      );
+      if (!tpl || !fullMode || !minimalMode) return;
+
+      const content = tpl.content;
+      const title = content.querySelector('[data-project-title]')?.textContent ?? '';
+      const desc = content.querySelector('[data-project-desc]')?.textContent ?? '';
+      const images = content.querySelector('[data-project-images]');
+
+      if (titleEl) titleEl.textContent = title;
+      if (descEl) descEl.textContent = desc;
+      if (galleryEl && images) {
+        galleryEl.replaceChildren(images.cloneNode(true));
+      }
+
+      minimalMode.hidden = true;
+      fullMode.hidden = false;
+
+      open();
+    };
+
+    const open = () => {
+  modal.showModal();
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    const card = modal.querySelector<HTMLElement>('.card');
+    if (card) card.scrollTop = 0;
+  });
+};
+
+    const close = () => {
+      modal.close();
+      document.body.style.overflow = '';
+    };
+
+    // Gallery triggers
+    document.querySelectorAll<HTMLButtonElement>('[data-gallery-item]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.galleryItem;
+        if (id) openFull(id);
+      });
+    });
+
+    // Close: button
+    modal.querySelector('[data-modal-close]')?.addEventListener('click', close);
+
+    // Close: back button (full mode)
+    modal.querySelector('[data-modal-back]')?.addEventListener('click', close);
+
+    // Close: backdrop click (clicking the dialog itself, not its content)
+    fullMode?.addEventListener('click', (e) => {
+  if (e.target === fullMode) close();
+});
+
+    // Native Esc fires the dialog's 'close' event — sync body scroll
+    modal.addEventListener('close', () => {
+      document.body.style.overflow = '';
+    });
+  }
+</script>

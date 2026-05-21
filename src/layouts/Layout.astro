@@ -11,17 +11,18 @@ import Avatar from '../components/Avatar.astro';
 import Header from '../components/Header.astro';
 import FolderLink from '../components/FolderLink.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import Modal from '../components/Modal.astro';
 import { profile, socials } from '../data/site';
-
-type FolderNav = 'home' | 'back';
 
 interface Props {
   title: string;
   description?: string;
-  folderNav?: FolderNav;
 }
 
-const { title, description = profile.description, folderNav = 'home' } = Astro.props;
+const { title, description = profile.description } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const isHome = pathname === '/';
 
 const hasGallery = Astro.slots.has('gallery');
 ---
@@ -36,7 +37,7 @@ const hasGallery = Astro.slots.has('gallery');
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
-  <body>
+  <>
     <main class="layout">
       <div class="top">
         <Avatar />
@@ -44,7 +45,6 @@ const hasGallery = Astro.slots.has('gallery');
           <Header name={profile.name} role={profile.role} />
         </div>
       </div>
-
       {
         hasGallery && (
           <div class="gallery">
@@ -52,47 +52,42 @@ const hasGallery = Astro.slots.has('gallery');
           </div>
         )
       }
-
       <div class="body">
         <slot />
       </div>
-
       <nav class="folders">
-        {
-          folderNav === 'home' ? (
-            <>
-              <FolderLink href="/design-archives" label="Design Archives" />
-              <FolderLink href="/playground" label="Playground" />
-            </>
-          ) : (
-            <FolderLink href="/" label="Home" />
-          )
-        }
+        <FolderLink
+          href="/design-archives"
+          label="Design Archives"
+          active={pathname.startsWith('/design-archives')}
+        />
+        <FolderLink
+          href="/playground"
+          label="Playground"
+          active={pathname.startsWith('/playground')}
+        />
+        {!isHome && <FolderLink href="/" label="Home" />}
       </nav>
-
       <div class="socials-wrap">
         <SocialLinks links={socials} />
       </div>
     </main>
+    <Modal />
   </body>
 </html>
 
 <style lang="scss">
   .layout {
-    min-height: 100vh;
-    padding: $space-l 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  min-height: 100vh;
+  padding: $space-l 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    @media (max-height: #{$bp-tall - 1px}) {
-      padding-bottom: $space-l * 2;
-    }
-
-    @media (min-width: $bp-center) and (min-height: $bp-tall) {
-      justify-content: center;
-    }
+  @media (max-height: #{$bp-tall - 1px}) {
+    padding-bottom: $space-l * 2;
   }
+}
 
   // 592px-constrained sections
   .top,
