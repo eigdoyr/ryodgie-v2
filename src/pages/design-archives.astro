@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Gallery from '../components/Gallery.astro';
+
+const archives = await getCollection('archives');
+
+const sorted = archives.sort((a, b) => {
+  const aOrder = a.data.order ?? Infinity;
+  const bOrder = b.data.order ?? Infinity;
+  return aOrder - bOrder;
+});
+
+const galleryItems = sorted.map((entry) => ({
+  id: entry.id,
+  image: entry.data.cover,
+  alt: entry.data.title,
+}));
+---
+
+<Layout title="Design Archives — Ryodgie Barnatia" folderNav="back">
+  <Gallery slot="gallery" items={galleryItems} />
+</Layout>

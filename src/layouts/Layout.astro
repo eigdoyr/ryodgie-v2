@@ -7,12 +7,23 @@ import '@fontsource/dm-mono/500.css';
 import '../styles/typography.scss';
 import '../styles/global.scss';
 
+import Avatar from '../components/Avatar.astro';
+import Header from '../components/Header.astro';
+import FolderLink from '../components/FolderLink.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { profile, socials } from '../data/site';
+
+type FolderNav = 'home' | 'back';
+
 interface Props {
   title: string;
   description?: string;
+  folderNav?: FolderNav;
 }
 
-const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack Developer.' } = Astro.props;
+const { title, description = profile.description, folderNav = 'home' } = Astro.props;
+
+const hasGallery = Astro.slots.has('gallery');
 ---
 
 <!doctype html>
@@ -26,38 +37,94 @@ const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack 
     <title>{title}</title>
   </head>
   <body>
-  <main class="layout">
-    <div class="page">
-      <slot />
-    </div>
-  </main>
-</body>
+    <main class="layout">
+      <div class="top">
+        <Avatar />
+        <div class="header-wrap">
+          <Header name={profile.name} role={profile.role} />
+        </div>
+      </div>
+
+      {
+        hasGallery && (
+          <div class="gallery">
+            <slot name="gallery" />
+          </div>
+        )
+      }
+
+      <div class="body">
+        <slot />
+      </div>
+
+      <nav class="folders">
+        {
+          folderNav === 'home' ? (
+            <>
+              <FolderLink href="/design-archives" label="Design Archives" />
+              <FolderLink href="/playground" label="Playground" />
+            </>
+          ) : (
+            <FolderLink href="/" label="Home" />
+          )
+        }
+      </nav>
+
+      <div class="socials-wrap">
+        <SocialLinks links={socials} />
+      </div>
+    </main>
+  </body>
+</html>
 
 <style lang="scss">
   .layout {
-  min-height: 100vh;
-  padding: $space-l 24px;
-
-  // Short viewports — extra bottom room so content doesn't pin to edge
-  @media (max-height: #{$bp-tall - 1px}) {
-    padding-bottom: $space-l * 2;
-  }
-
-  // Tall + wide enough — flex-center the content vertically
-  @media (min-width: $bp-center) and (min-height: $bp-tall) {
+    min-height: 100vh;
+    padding: $space-l 24px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-  }
-}
 
-.page {
-  width: 100%;
-  max-width: $max-main;
-  margin: 0 auto;
+    @media (max-height: #{$bp-tall - 1px}) {
+      padding-bottom: $space-l * 2;
+    }
 
-  @media (min-width: $bp-center) and (min-height: $bp-tall) {
-    margin: 0;
+    @media (min-width: $bp-center) and (min-height: $bp-tall) {
+      justify-content: center;
+    }
   }
-}
+
+  // 592px-constrained sections
+  .top,
+  .body,
+  .folders,
+  .socials-wrap {
+    width: 100%;
+    max-width: $max-main;
+  }
+
+  .header-wrap {
+    margin-top: $space-s;
+  }
+
+  // Gallery breaks out to full viewport width
+  .gallery {
+    width: 100%;
+    margin-top: $space-l;
+  }
+
+  .body:not(:empty) {
+    margin-top: $space-l;
+  }
+
+  .folders {
+    margin-top: $space-l;
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+  }
+
+  .socials-wrap {
+    margin-top: $space-l;
+  }
 </style>

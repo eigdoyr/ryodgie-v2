@@ -1,68 +1,27 @@
 ---
 import { getEntry, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Avatar from '../components/Avatar.astro';
-import Header from '../components/Header.astro';
-import FolderLink from '../components/FolderLink.astro';
-import SocialLinks from '../components/SocialLinks.astro';
 
 const about = await getEntry('about', 'index');
 if (!about) throw new Error('About content missing');
 const { Content } = await render(about);
-
-const socials = [
-  { label: 'Github', href: 'https://github.com/eigdoyr' },
-  { label: 'Dribbble', href: 'https://dribbble.com/ryodgie' },
-  { label: 'Linkedin', href: 'https://www.linkedin.com/in/ryodgie/' },
-  { label: 'Email', href: 'mailto:hello@ryodgie.com' },
-];
 ---
 
 <Layout title="Ryodgie Barnatia">
-  <Avatar />
-  <div class="header-wrap">
-    <Header
-      name="Ryodgie Barnatia"
-      role="Web / UI Designer & Full-stack Developer specializing in front-end development."
-    />
-  </div>
   <div class="about">
     <Content />
-  </div>
-  <nav class="folders">
-    <FolderLink href="/design-archives" label="Design Archives" />
-    <FolderLink href="/playground" label="Playground" />
-  </nav>
-  <div class="socials-wrap">
-    <SocialLinks links={socials} />
   </div>
 </Layout>
 
 <style lang="scss">
-  .header-wrap {
-    margin-top: $space-s;
-  }
+  .about {
+    color: $color-text-muted;
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
 
-.about {
-  margin-top: $space-l;
-  color: $color-text-muted;
-  font-family: $font-sans;
-  font-size: $text-base;
-  line-height: $leading-normal;
-
-  > :global(p) + :global(p) {
-    margin-top: $space-s;
-  }
-}
-
-  .folders {
-    margin-top: $space-l;
-    display: flex;
-    flex-direction: column;
-    gap: $space-xs;
-  }
-
-  .socials-wrap {
-    margin-top: $space-l;
+    > :global(p) + :global(p) {
+      margin-top: $space-s;
+    }
   }
 </style>
