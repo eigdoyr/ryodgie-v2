@@ -3,8 +3,8 @@ import { getEntry, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Avatar from '../components/Avatar.astro';
 import Header from '../components/Header.astro';
-import FolderLink from '../components/FolderLink.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import WorksList from '../components/WorksList.astro';
 
 const about = await getEntry('about', 'index');
 if (!about) throw new Error('About content missing');
@@ -26,13 +26,17 @@ const socials = [
       role="Web / UI Designer & Full-stack Developer specializing in front-end development."
     />
   </div>
+
   <div class="about">
     <Content />
   </div>
-  <nav class="folders">
-    <FolderLink href="/design-archives" label="Design Archives" />
-    <FolderLink href="/playground" label="Playground" />
-  </nav>
+
+  <hr class="divider" />
+
+  <WorksList />
+
+  <hr class="divider" />
+
   <div class="socials-wrap">
     <SocialLinks links={socials} />
   </div>
@@ -43,26 +47,26 @@ const socials = [
     margin-top: $space-s;
   }
 
-.about {
-  margin-top: $space-l;
-  color: $color-text-muted;
-  font-family: $font-sans;
-  font-size: $text-base;
-  line-height: $leading-normal;
+  .about {
+    margin-top: $space-m;
+    color: $color-text-muted;
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
 
-  > :global(p) + :global(p) {
-    margin-top: $space-s;
+    > :global(p) + :global(p) {
+      margin-top: $space-s;
+    }
   }
+
+ .divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  margin: $space-m 0;
 }
 
-  .folders {
-    margin-top: $space-l;
-    display: flex;
-    flex-direction: column;
-    gap: $space-xs;
-  }
-
   .socials-wrap {
-    margin-top: $space-l;
+    // no top margin — the divider above provides the spacing
   }
 </style>

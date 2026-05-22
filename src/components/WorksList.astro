@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import CameraIcon from './icons/CameraIcon.astro';
+import CoffeeIcon from './icons/CoffeeIcon.astro';
+import WineIcon from './icons/WineIcon.astro';
+import SprayIcon from './icons/SprayIcon.astro';
+import UtensilsIcon from './icons/UtensilsIcon.astro';
+import FolderIcon from './icons/FolderIcon.astro';
+
+
+const iconRegistry = {
+  camera: CameraIcon,
+  coffee: CoffeeIcon,
+  wine: WineIcon,
+  spray: SprayIcon,
+  utensils: UtensilsIcon,
+};
+
+const works = await getCollection('works');
+console.log('WORKS COUNT:', works.length, works.map(w => w.id));
+
+const sorted = works.sort((a, b) => {
+  const aOrder = a.data.order ?? Infinity;
+  const bOrder = b.data.order ?? Infinity;
+  return aOrder - bOrder;
+});
+---
+
+<section class="works">
+  <h2 class="label">Works</h2>
+
+  <ul class="grid">
+    {
+      sorted.map((entry) => {
+        const Icon = iconRegistry[entry.data.icon];
+        return (
+          <li>
+            <button type="button" class="item" data-work={entry.id}>
+              <span class="icon"><Icon /></span>
+              <span class="name">{entry.data.title}</span>
+            </button>
+          </li>
+        );
+      })
+    }
+  </ul>
+
+  <div class="playground-row">
+    <button type="button" class="item" data-playground>
+      <span class="icon"><FolderIcon /></span>
+      <span class="name">Archives / Playground</span>
+    </button>
+  </div>
+</section>
+
+<style lang="scss">
+  .works {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+}
+
+.label {
+  font-family: $font-mono;
+  font-size: $text-sm;
+  font-weight: $weight-regular;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: $color-text-muted;
+}
+
+.grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: $space-m;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-xs $space-m;
+
+  @media (max-width: 560px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  font-family: $font-mono;
+  font-size: $text-sm;
+  color: $color-text;
+  text-align: left;
+
+   &:hover {
+    color: $color-accent;
+  }
+}
+
+.icon {
+  color: $color-accent;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.name {
+  white-space: nowrap;
+}
+
+.playground-row {
+  margin-top: $space-xs;
+  padding-left: $space-m;
+}
+</style>
