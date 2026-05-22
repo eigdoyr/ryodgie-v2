@@ -8,4 +8,29 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { about };
+const works = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/works" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      year: z.number().optional(),
+      icon: z.enum(["camera", "coffee", "wine", "spray", "utensils"]),
+      cover: image(),
+      images: z.array(image()),
+      link: z.string().url().optional(),
+      order: z.number().optional(),
+    }),
+});
+
+const playground = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/playground" }),
+  schema: ({ image }) =>
+    z.object({
+      image: image(),
+      alt: z.string().optional(),
+      order: z.number().optional(),
+    }),
+});
+
+export const collections = { about, works, playground };
