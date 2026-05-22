@@ -1,14 +1,20 @@
 ---
 import { getEntry, render } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Avatar from '../components/Avatar.astro';
 import Header from '../components/Header.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import WorksList from '../components/WorksList.astro';
+import Modal from '../components/Modal.astro';
+
 
 const about = await getEntry('about', 'index');
 if (!about) throw new Error('About content missing');
 const { Content } = await render(about);
+
+const works = await getCollection('works');
 
 const socials = [
   { label: 'Github', href: 'https://github.com/eigdoyr' },
@@ -16,6 +22,8 @@ const socials = [
   { label: 'Linkedin', href: 'https://www.linkedin.com/in/ryodgie/' },
   { label: 'Email', href: 'mailto:hello@ryodgie.com' },
 ];
+
+
 ---
 
 <Layout title="Ryodgie Barnatia">
@@ -40,6 +48,30 @@ const socials = [
   <div class="socials-wrap">
     <SocialLinks links={socials} />
   </div>
+{
+    works.map((entry) => (
+      <template data-project={entry.id}>
+        <span data-field="title">{entry.data.title}</span>
+        <span data-field="desc">{entry.data.description}</span>
+        <span data-field="link">{entry.data.link ?? ''}</span>
+        <div data-field="images">
+          {entry.data.images.map((img) => (
+            <Image
+              src={img}
+              alt={entry.data.title}
+              widths={[600, 1200]}
+              sizes="(max-width: 768px) 90vw, 592px"
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </div>
+      </template>
+    ))
+  }
+
+  <Modal />
+  <Modal />
 </Layout>
 
 <style lang="scss">

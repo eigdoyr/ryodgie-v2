@@ -1,0 +1,236 @@
+---
+// Modal shell — content injected at runtime by JS.
+// Two modes: 'full' (works projects) and 'grid' (playground).
+---
+
+<dialog class="modal" data-modal tabindex="-1">
+  <!-- Full mode: project card -->
+  <div class="mode-full" data-modal-full hidden>
+    <div class="card">
+      <header class="card-head">
+        <h2 class="card-title" data-modal-title></h2>
+        <p class="card-desc" data-modal-desc></p>
+      </header>
+      <div class="card-gallery" data-modal-gallery></div>
+      <a class="card-link" data-modal-link target="_blank" rel="noopener noreferrer" hidden>
+        Visit live site &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Grid mode: playground masonry -->
+  <div class="mode-grid" data-modal-grid hidden>
+    <div class="grid-masonry" data-modal-masonry></div>
+  </div>
+
+  <button type="button" class="modal-close" data-modal-close aria-label="Close">
+    &times;
+  </button>
+</dialog>
+
+<style lang="scss">
+  .modal {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    color: $color-text;
+
+    &::backdrop {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  // ---- Full mode ----
+  .mode-full {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-l 24px;
+
+    @media (max-width: 560px) {
+    padding: $space-m 16px;
+  }
+  }
+
+  .card-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: $space-s;
+
+  :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 2px;
+  }
+}
+
+  .card {
+    background: $color-background;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    max-width: $max-main;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: $space-l;
+    display: flex;
+    flex-direction: column;
+    gap: $space-m;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (max-width: 560px) {
+    padding: $space-m;
+  }
+  }
+
+  .card-title {
+    font-family: $font-mono;
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .card-desc {
+    margin-top: $space-s;
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
+    color: $color-text-muted;
+  }
+
+  .card-link {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    align-self: flex-start;
+  }
+
+  // ---- Grid mode ----
+  .mode-grid {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: $space-l 24px;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // ---- Close ----
+  .modal-close {
+    position: fixed;
+    top: $space-m;
+    right: $space-m;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: $color-text;
+    z-index: 1;
+  }
+</style>
+
+<script>
+
+  const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
+
+  if (modal) {
+    const fullMode = modal.querySelector<HTMLElement>('[data-modal-full]');
+    const gridMode = modal.querySelector<HTMLElement>('[data-modal-grid]');
+    const titleEl = modal.querySelector<HTMLElement>('[data-modal-title]');
+    const descEl = modal.querySelector<HTMLElement>('[data-modal-desc]');
+    const galleryEl = modal.querySelector<HTMLElement>('[data-modal-gallery]');
+    const linkEl = modal.querySelector<HTMLAnchorElement>('[data-modal-link]');
+
+   const open = () => {
+  modal.showModal();
+  document.body.style.overflow = 'hidden';
+  modal.focus();
+};
+
+    const close = () => {
+      modal.close();
+    };
+
+    const openFull = (projectId: string) => {
+      const tpl = document.querySelector<HTMLTemplateElement>(
+        `template[data-project="${projectId}"]`
+      );
+      if (!tpl || !fullMode || !gridMode) return;
+
+      const content = tpl.content;
+      const title = content.querySelector('[data-field="title"]')?.textContent ?? '';
+      const desc = content.querySelector('[data-field="desc"]')?.textContent ?? '';
+      const link = content.querySelector('[data-field="link"]')?.textContent ?? '';
+      const images = content.querySelector('[data-field="images"]');
+
+      if (titleEl) titleEl.textContent = title;
+      if (descEl) descEl.textContent = desc;
+      if (galleryEl && images) {
+        galleryEl.replaceChildren(images.cloneNode(true));
+      }
+      if (linkEl) {
+        if (link) {
+          linkEl.href = link;
+          linkEl.hidden = false;
+        } else {
+          linkEl.hidden = true;
+        }
+      }
+
+      gridMode.hidden = true;
+      fullMode.hidden = false;
+      open();
+
+      const card = modal.querySelector<HTMLElement>('.card');
+      requestAnimationFrame(() => {
+        if (card) card.scrollTop = 0;
+      });
+    };
+
+    // Wire WORKS triggers
+    document.querySelectorAll<HTMLButtonElement>('[data-work]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.work;
+        if (id) openFull(id);
+      });
+    });
+
+    // Close: button
+    modal.querySelector('[data-modal-close]')?.addEventListener('click', close);
+
+    // Explicit Esc handling — Safari's native dialog Esc is unreliable
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.open) {
+    e.preventDefault();
+    close();
+  }
+});
+
+    // Close: backdrop
+    fullMode?.addEventListener('click', (e) => {
+      if (e.target === fullMode) close();
+    });
+    gridMode?.addEventListener('click', (e) => {
+      if (e.target === gridMode) close();
+    });
+
+    // Restore scroll on any close
+    modal.addEventListener('close', () => {
+      document.body.style.overflow = '';
+    });
+  }
+</script>

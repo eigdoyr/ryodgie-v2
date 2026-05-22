@@ -17,7 +17,7 @@ const iconRegistry = {
 };
 
 const works = await getCollection('works');
-console.log('WORKS COUNT:', works.length, works.map(w => w.id));
+
 
 const sorted = works.sort((a, b) => {
   const aOrder = a.data.order ?? Infinity;
