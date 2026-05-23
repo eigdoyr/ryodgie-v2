@@ -1,0 +1,150 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const works = await getCollection('works');
+
+  const sorted = works.sort((a, b) => {
+    const aOrder = a.data.order ?? Infinity;
+    const bOrder = b.data.order ?? Infinity;
+    return aOrder - bOrder;
+  });
+
+  return sorted.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      prev: index > 0 ? sorted[index - 1] : null,
+      next: index < sorted.length - 1 ? sorted[index + 1] : null,
+    },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { title, description, year, cover, images, link } = entry.data;
+---
+
+<Layout
+  title={`${title} — Ryodgie Barnatia`}
+  description={description}
+>
+  <article class="project">
+    <header class="project-head">
+      <h1 class="project-title">{title}</h1>
+      {year && <span class="project-year">{year}</span>}
+      <p class="project-desc">{description}</p>
+      {
+        link && (
+          <a class="project-link" href={link} target="_blank" rel="noopener noreferrer">
+            Visit live site &rarr;
+          </a>
+        )
+      }
+    </header>
+
+    <div class="project-gallery">
+      {
+        images.map((img) => (
+          <Image
+            src={img}
+            alt={title}
+            widths={[600, 1200]}
+            sizes="(max-width: 768px) 90vw, 592px"
+            loading="lazy"
+            decoding="async"
+          />
+        ))
+      }
+    </div>
+
+    <nav class="project-nav">
+      <div class="nav-side">
+        {prev && <a href={`/works/${prev.id}`}>&larr; {prev.data.title}</a>}
+      </div>
+      <a href="/" class="nav-home">Home</a>
+      <div class="nav-side nav-right">
+        {next && <a href={`/works/${next.id}`}>{next.data.title} &rarr;</a>}
+      </div>
+    </nav>
+  </article>
+</Layout>
+
+<style lang="scss">
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: $space-l;
+  }
+
+  .project-head {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+  }
+
+  .project-title {
+    font-family: $font-mono;
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .project-year {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text-muted;
+  }
+
+  .project-desc {
+    font-family: $font-sans;
+    font-size: $text-base;
+    line-height: $leading-normal;
+    color: $color-text-muted;
+  }
+
+  .project-link {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    align-self: flex-start;
+  }
+
+  .project-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+
+    :global(img) {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 2px;
+    }
+  }
+
+  .project-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $space-m;
+    font-family: $font-mono;
+    font-size: $text-sm;
+    padding-top: $space-m;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-side {
+    flex: 1;
+  }
+
+  .nav-right {
+    text-align: right;
+  }
+
+  .nav-home {
+    flex-shrink: 0;
+    color: $color-text-muted;
+  }
+</style>

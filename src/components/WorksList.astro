@@ -35,10 +35,10 @@ const sorted = works.sort((a, b) => {
         const Icon = iconRegistry[entry.data.icon];
         return (
           <li>
-            <button type="button" class="item" data-work={entry.id}>
+            <a href={`/works/${entry.id}`} class="item" data-work={entry.id}>
               <span class="icon"><Icon /></span>
               <span class="name">{entry.data.title}</span>
-            </button>
+            </a>
           </li>
         );
       })

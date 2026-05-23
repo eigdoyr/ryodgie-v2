@@ -155,8 +155,8 @@
     const galleryEl = modal.querySelector<HTMLElement>('[data-modal-gallery]');
     const linkEl = modal.querySelector<HTMLAnchorElement>('[data-modal-link]');
 
-   const open = () => {
-  modal.showModal();
+const open = () => {
+  if (!modal.open) modal.showModal();
   document.body.style.overflow = 'hidden';
   modal.focus();
 };
@@ -202,12 +202,15 @@
     };
 
     // Wire WORKS triggers
-    document.querySelectorAll<HTMLButtonElement>('[data-work]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.work;
-        if (id) openFull(id);
-      });
-    });
+    document.querySelectorAll<HTMLAnchorElement>('a[data-work]').forEach((link) => {
+  link.addEventListener('click', (e) => {
+    // Let modified clicks through — new tab, etc. — to the real page
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    const id = link.dataset.work;
+    if (id) openFull(id);
+  });
+});
 
     // Close: button
     modal.querySelector('[data-modal-close]')?.addEventListener('click', close);
