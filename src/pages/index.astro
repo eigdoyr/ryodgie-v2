@@ -104,4 +104,65 @@ const v1 = { label: "'folio v1", href: 'https://ryodgie-portfolio-v1.vercel.app'
   .socials-wrap {
     // no top margin — the divider above provides the spacing
   }
+
+  // ---- Entrance ----
+// Each top-level section fades up, staggered. Plays once on load.
+:global(.avatar-wrap),
+:global(.header-wrap),
+.about,
+:global(.divider),
+:global(.works),
+:global(.socials-wrap) {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeUp $duration-base $ease-out-soft forwards;
+}
+
+:global(.avatar-wrap) {
+  animation-delay: 0ms;
+}
+
+:global(.header-wrap) {
+  animation-delay: 80ms;
+}
+
+.about {
+  animation-delay: 160ms;
+}
+
+:global(.divider):first-of-type {
+  animation-delay: 240ms;
+}
+
+:global(.works) {
+  animation-delay: 320ms;
+}
+
+:global(.divider):last-of-type {
+  animation-delay: 400ms;
+}
+
+:global(.socials-wrap) {
+  animation-delay: 480ms;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.avatar-wrap),
+  :global(.header-wrap),
+  .about,
+  :global(.divider),
+  :global(.works),
+  :global(.socials-wrap) {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
 </style>
