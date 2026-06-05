@@ -43,12 +43,13 @@ const sorted = works.sort((a, b) => {
     }
   </ul>
 
-  <div class="playground-row">
-    <button type="button" class="item" data-playground>
-      <span class="icon"><FolderIcon /></span>
-      <span class="name">Archives / Playground</span>
-    </button>
-  </div>
+<div class="playground-row">
+  <button type="button" class="item is-disabled" data-playground disabled>
+    <span class="icon"><FolderIcon /></span>
+    <span class="name">Archives / Playground</span>
+    <span class="badge">[ pending ]</span>
+  </button>
+</div>
 </section>
 
 <style lang="scss">
@@ -108,5 +109,31 @@ const sorted = works.sort((a, b) => {
 .playground-row {
   margin-top: $space-xs;
   padding-left: $space-m;
+}
+
+.item.is-disabled {
+  color: $color-text-muted;
+  cursor: default;
+
+  .icon {
+    color: $color-text-muted;
+  }
+
+  &:hover {
+    color: $color-text-muted;
+
+    .icon {
+      color: $color-text-muted;
+    }
+  }
+}
+
+.badge {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: $color-text-muted;
+  margin-left: $space-xs;
+  opacity: 0.7;
 }
 </style>

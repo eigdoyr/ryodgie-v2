@@ -23,6 +23,7 @@ const socials = [
   { label: 'Email', href: 'mailto:hello@ryodgie.com' },
 ];
 
+const v1 = { label: "'folio v1", href: 'https://ryodgie-portfolio-v1.vercel.app' };
 
 ---
 
@@ -31,7 +32,7 @@ const socials = [
   <div class="header-wrap">
     <Header
       name="Ryodgie Barnatia"
-      role="Web / UI Designer & Full-stack Developer specializing in front-end development."
+      role="Web / UI Designer & Front-end Developer."
     />
   </div>
 
@@ -46,7 +47,7 @@ const socials = [
   <hr class="divider" />
 
   <div class="socials-wrap">
-    <SocialLinks links={socials} />
+    <SocialLinks links={socials} v1={v1} />
   </div>
 {
     works.map((entry) => (
