@@ -34,7 +34,7 @@
 // hover color is opt-in per context.
 a {
   color: $color-text;
-  transition: color $transition-fast;
+  transition: color $duration-fast $ease-out-soft;
 
   &:hover {
     color: $color-accent;
