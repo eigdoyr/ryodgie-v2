@@ -15,7 +15,7 @@ const works = defineCollection({
       title: z.string(),
       description: z.string(),
       year: z.number().optional(),
-      icon: z.enum(["camera", "coffee", "wine", "spray", "utensils"]),
+      icon: z.enum(["camera", "coffee", "wine", "spray"]),
       cover: image(),
       images: z.array(image()),
       link: z.string().url().optional(),
