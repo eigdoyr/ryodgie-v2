@@ -10,5 +10,15 @@ images:
   - ./03.webp
   - ./04.webp
   - ./05.webp
+status: shipped
+link: https://le-maison-valmont.netlify.app
+repo: https://github.com/eigdoyr/maison-valmont
+tech:
+  - Vue 3
+  - TypeScript
+  - Vite
+  - GSAP
+  - SCSS
+role: Design & Development
 order: 3
 ---

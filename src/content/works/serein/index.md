@@ -9,5 +9,7 @@ images:
   - ./02.webp
   - ./03.webp
   - ./04.webp
+status: concept
+role: Concept Design
 order: 4
 ---

@@ -18,7 +18,11 @@ const works = defineCollection({
       icon: z.enum(["camera", "coffee", "wine", "spray"]),
       cover: image(),
       images: z.array(image()),
+      status: z.enum(["shipped", "concept"]).default("shipped"),
       link: z.string().url().optional(),
+      repo: z.string().url().optional(),
+      tech: z.array(z.string()).optional(),
+      role: z.string().optional(),
       order: z.number().optional(),
     }),
 });
