@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import { pageTitle } from '../../data/seo';
 
 export async function getStaticPaths() {
   const works = await getCollection('works');
@@ -27,7 +28,7 @@ const { title, description, year, cover, images, link } = entry.data;
 ---
 
 <Layout
-  title={`${title} — Ryodgie Barnatia`}
+  title={pageTitle(title)}
   description={description}
 >
   <article class="project">

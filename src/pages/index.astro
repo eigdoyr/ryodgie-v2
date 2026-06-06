@@ -8,6 +8,7 @@ import Header from '../components/Header.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import WorksList from '../components/WorksList.astro';
 import Modal from '../components/Modal.astro';
+import { pageTitle, site } from '../data/seo';
 
 
 const about = await getEntry('about', 'index');
@@ -29,7 +30,7 @@ const v1 = { label: "'folio v1", href: 'https://ryodgie-portfolio-v1.vercel.app'
 
 ---
 
-<Layout title="Ryodgie Barnatia">
+<Layout title={pageTitle()} description={site.description}>
   <Avatar src="/profile.png" alt="Ryodgie Barnatia" />
   <div class="header-wrap">
     <Header
