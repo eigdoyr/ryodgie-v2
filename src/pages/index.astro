@@ -53,29 +53,32 @@ const v1 = { label: "'folio v1", href: 'https://ryodgie-portfolio-v1.vercel.app'
     <SocialLinks links={socials} v1={v1} />
   </div>
 {
-    works.map((entry) => (
-      <template data-project={entry.id}>
-        <span data-field="title">{entry.data.title}</span>
-        <span data-field="desc">{entry.data.description}</span>
-        <span data-field="link">{entry.data.link ?? ''}</span>
-        <div data-field="images">
-          {entry.data.images.map((img) => (
-            <Image
-              src={img}
-              alt={entry.data.title}
-              widths={[600, 1200]}
-              sizes="(max-width: 768px) 90vw, 592px"
-              loading="lazy"
-              decoding="async"
-            />
-          ))}
-        </div>
-      </template>
-    ))
-  }
-
-  <Modal />
-  <Modal />
+  works.map((entry) => (
+    <template data-project={entry.id}>
+      <span data-field="title">{entry.data.title}</span>
+      <span data-field="year">{entry.data.year ?? ''}</span>
+      <span data-field="desc">{entry.data.description}</span>
+      <span data-field="role">{entry.data.role ?? ''}</span>
+      <span data-field="tech">{entry.data.tech?.join('|') ?? ''}</span>
+      <span data-field="status">{entry.data.status}</span>
+      <span data-field="link">{entry.data.link ?? ''}</span>
+      <span data-field="repo">{entry.data.repo ?? ''}</span>
+      <div data-field="images">
+        {entry.data.images.map((img) => (
+          <Image
+            src={img}
+            alt={entry.data.title}
+            widths={[600, 1200]}
+            sizes="(max-width: 768px) 90vw, 592px"
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+    </template>
+  ))
+}
+<Modal />
 </Layout>
 
 <style lang="scss">
