@@ -24,23 +24,66 @@ export async function getStaticPaths() {
 }
 
 const { entry, prev, next } = Astro.props;
-const { title, description, year, cover, images, link } = entry.data;
+const { title, description, year, cover, images, link, repo, tech, role, status } = entry.data;
 ---
 
-<Layout
-  title={pageTitle(title)}
-  description={description}
->
+<Layout title={pageTitle(title)} description={description}>
   <article class="project">
     <header class="project-head">
-      <h1 class="project-title">{title}</h1>
-      {year && <span class="project-year">{year}</span>}
+      <div class="title-row">
+        <h1 class="project-title">{title}</h1>
+        {year && <span class="project-year">{year}</span>}
+      </div>
+
       <p class="project-desc">{description}</p>
+
       {
-        link && (
-          <a class="project-link" href={link} target="_blank" rel="noopener noreferrer">
-            Visit live site &rarr;
-          </a>
+        (role || tech) && (
+          <dl class="meta">
+            {
+              role && (
+                <div class="meta-row">
+                  <dt>Role</dt>
+                  <dd>{role}</dd>
+                </div>
+              )
+            }
+            {
+              tech && tech.length > 0 && (
+                <div class="meta-row">
+                  <dt>Stack</dt>
+                  <dd>
+                    <ul class="pills">
+                      {tech.map((t) => <li class="pill">{t}</li>)}
+                    </ul>
+                  </dd>
+                </div>
+              )
+            }
+          </dl>
+        )
+      }
+
+      {
+        status === 'concept' && (
+          <p class="concept-note">Design only — not built.</p>
+        )
+      }
+
+      {
+        (link || repo) && (
+          <div class="project-links">
+            {link && (
+              <a href={link} target="_blank" rel="noopener noreferrer">
+                Visit live site &rarr;
+              </a>
+            )}
+            {repo && (
+              <a href={repo} target="_blank" rel="noopener noreferrer">
+                View source &rarr;
+              </a>
+            )}
+          </div>
         )
       }
     </header>
@@ -82,7 +125,14 @@ const { title, description, year, cover, images, link } = entry.data;
   .project-head {
     display: flex;
     flex-direction: column;
+    gap: $space-m;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: baseline;
     gap: $space-s;
+    flex-wrap: wrap;
   }
 
   .project-title {
@@ -106,10 +156,73 @@ const { title, description, year, cover, images, link } = entry.data;
     color: $color-text-muted;
   }
 
-  .project-link {
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: $space-s;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: $space-m;
+    align-items: start;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: $space-xs;
+    }
+  }
+
+  .meta-row dt {
     font-family: $font-mono;
     font-size: $text-sm;
-    align-self: flex-start;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: $color-text-muted;
+  }
+
+  .meta-row dd {
+    margin: 0;
+    font-family: $font-mono;
+    font-size: $text-sm;
+  }
+
+  .pills {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-xs;
+  }
+
+  .pill {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    padding: 2px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    color: $color-text;
+  }
+
+  .concept-note {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    color: $color-text-muted;
+    font-style: italic;
+  }
+
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-m;
+
+    a {
+      font-family: $font-mono;
+      font-size: $text-sm;
+    }
   }
 
   .project-gallery {
