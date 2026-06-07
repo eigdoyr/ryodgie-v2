@@ -1,43 +1,52 @@
-# Astro Starter Kit: Minimal
+# ryodgie.com
 
-```sh
-npm create astro@latest -- --template minimal
+Personal portfolio of Ryodgie Barnatia. Web/UI designer and front-end developer.
+
+[![ryodgie.com](./public/screenshot.png)](https://ryodgie.com)
+
+→ [ryodgie.com](https://ryodgie.com)
+
+## Stack
+
+- [Astro 5](https://astro.build) — static site framework
+- SCSS with design tokens
+- DM Sans + DM Mono (self-hosted via `@fontsource`)
+- Vanilla TypeScript for interactivity
+- Deployed on [Vercel](https://vercel.com)
+
+## Develop locally
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Open \`localhost:4321\`.
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command           | Action                               |
+| :---------------- | :----------------------------------- |
+| `npm install`     | Install dependencies                 |
+| `npm run dev`     | Start local dev server               |
+| `npm run build`   | Build to `./dist/`                   |
+| `npm run preview` | Preview the production build locally |
+
+## Structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── content/
+│   ├── about/       — bio (markdown)
+│   └── works/       — project entries (markdown + images)
+├── components/      — UI components
+├── data/seo.ts      — site metadata, page titles, structured data
+├── layouts/         — page shell
+├── pages/           — routes (landing + dynamic /works/[slug])
+└── styles/
+    └── tokens.scss  — colors, spacing, motion
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## License
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+© 2026 Ryodgie Barnatia. All rights reserved.
