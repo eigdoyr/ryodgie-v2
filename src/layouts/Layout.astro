@@ -7,12 +7,16 @@ import '@fontsource/dm-mono/500.css';
 import '../styles/typography.scss';
 import '../styles/global.scss';
 
+import { site, personSchema } from '../data/seo';
+
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack Developer.' } = Astro.props;
+const { title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const jsonLd = JSON.stringify(personSchema());
 ---
 
 <!doctype html>
@@ -22,43 +26,41 @@ const { title, description = 'Ryodgie Barnatia — Web/UI Designer & Full-stack 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href="/profile.png" />
     <link rel="apple-touch-icon" href="/profile.png" />
     <title>{title}</title>
+    <script type="application/ld+json" set:html={jsonLd} />
   </head>
   <body>
-  <main class="layout">
-    <div class="page">
-      <slot />
-    </div>
-  </main>
-</body>
+    <main class="layout">
+      <div class="page">
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
 
 <style lang="scss">
   .layout {
-  min-height: 100vh;
-  padding: $space-l 24px;
-
-  // Short viewports — extra bottom room so content doesn't pin to edge
-  @media (max-height: #{$bp-tall - 1px}) {
-    padding-bottom: $space-l * 2;
+    min-height: 100vh;
+    padding: $space-l 24px;
+    @media (max-height: #{$bp-tall - 1px}) {
+      padding-bottom: $space-l * 2;
+    }
+    @media (min-width: $bp-center) and (min-height: $bp-tall) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
-  // Tall + wide enough — flex-center the content vertically
-  @media (min-width: $bp-center) and (min-height: $bp-tall) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .page {
+    width: 100%;
+    max-width: $max-main;
+    margin: 0 auto;
+    @media (min-width: $bp-center) and (min-height: $bp-tall) {
+      margin: 0;
+    }
   }
-}
-
-.page {
-  width: 100%;
-  max-width: $max-main;
-  margin: 0 auto;
-
-  @media (min-width: $bp-center) and (min-height: $bp-tall) {
-    margin: 0;
-  }
-}
 </style>
