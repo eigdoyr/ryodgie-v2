@@ -3,7 +3,7 @@ export const site = {
   tagline: "Web / UI Designer & Front-End Developer",
   url: "https://ryodgie.com",
   description:
-    "Ryodgie Barnatia — Designer and Front-End Developer. Web/UI design, Vue, React, TypeScript, Astro.",
+    "Portfolio of Ryodgie Barnatia — Web/UI designer and front-end developer. Selected work in Vue, React, and Astro: editorial, e-commerce, and concept design.",
 } as const;
 
 export function pageTitle(page?: string): string {
