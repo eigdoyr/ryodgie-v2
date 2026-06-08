@@ -21,7 +21,7 @@ const {
     {src ? <img src={src} alt={alt} width={size} height={size} /> : <span aria-hidden="true">R</span>}
   </div>
 
-  {status === 'available' && <span class="dot" aria-label="Open to projects"></span>}
+  {status === 'available' && <span class="dot" role="img" aria-label="Open to projects"></span>}
 
   {
     showBubble && (

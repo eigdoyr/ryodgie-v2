@@ -40,3 +40,9 @@ a {
     color: $color-accent;
   }
 }
+
+.about a,
+.project-desc a,
+.bubble-text a {
+  font-weight: 500;
+}
