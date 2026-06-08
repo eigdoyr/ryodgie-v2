@@ -31,7 +31,12 @@ const v1 = { label: "'folio v1", href: 'https://ryodgie-portfolio-v1.vercel.app'
 ---
 
 <Layout title={pageTitle()} description={site.description}>
-  <Avatar src="/profile.png" alt="Ryodgie Barnatia" />
+  <Avatar
+    src="/profile.png"
+    alt="Ryodgie Barnatia"
+    status="available"
+    showBubble
+  />
   <div class="header-wrap">
     <Header
       name="Ryodgie Barnatia"

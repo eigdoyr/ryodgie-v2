@@ -3,17 +3,47 @@ interface Props {
   src?: string;
   alt?: string;
   size?: number;
+  status?: 'available' | 'away';
+  showBubble?: boolean;
 }
 
-
-const { src, alt = 'Ryodgie Barnatia', size = 50 } = Astro.props;
+const {
+  src,
+  alt = 'Ryodgie Barnatia',
+  size = 50,
+  status,
+  showBubble = false,
+} = Astro.props;
 ---
 
-<div class="avatar" style={`--size: ${size}px;`}>
-  {src ? <img src={src} alt={alt} width={size} height={size} /> : <span aria-hidden="true">R</span>}
+<div class="wrap" data-interactive={showBubble ? '' : undefined}>
+  <div class="avatar" style={`--size: ${size}px;`}>
+    {src ? <img src={src} alt={alt} width={size} height={size} /> : <span aria-hidden="true">R</span>}
+  </div>
+
+  {status === 'available' && <span class="dot" aria-label="Open to projects"></span>}
+
+  {
+    showBubble && (
+      <div class="bubble" role="tooltip" data-bubble>
+        <p class="bubble-text">
+          Hey — got a project, idea, or just want to chat? Reach me at{' '}
+          <a class="bubble-email" href="mailto:hello@ryodgie.com">hello@ryodgie.com</a>.
+        </p>
+      </div>
+    )
+  }
 </div>
 
 <style lang="scss">
+  // ---- Wrap ----
+  .wrap {
+    position: relative;
+    display: inline-block;
+    z-index: 100;
+  }
+
+  // ---- Avatar ----
   .avatar {
     width: var(--size);
     height: var(--size);
@@ -22,17 +52,108 @@ const { src, alt = 'Ryodgie Barnatia', size = 50 } = Astro.props;
     background: $color-text-muted;
     display: grid;
     place-items: center;
-    flex-shrink: 0;
     color: $color-background;
     font-family: $font-mono;
     font-weight: $weight-medium;
     font-size: $text-sm;
     user-select: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color $duration-fast $ease-out-soft;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  // Border brightens on hover — only when bubble is wired
+  @media (hover: hover) {
+    .wrap[data-interactive]:hover .avatar {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
   }
+
+  // ---- Status dot ----
+  .dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: $color-accent;
+    border-radius: 50%;
+  }
+
+  // ---- Bubble ----
+.bubble {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + #{$space-s});
+  transform: translateY(-50%) translateX(4px);
+  width: 260px;
+  max-width: calc(100vw - 100px);
+  padding: $space-s;
+  background: $color-background;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity $duration-base $ease-out-soft,
+    transform $duration-base $ease-out-soft;
+}
+
+  // Bubble visible when hovered (desktop) or activated by tap (touch)
+  @media (hover: hover) {
+  .wrap:hover .bubble,
+  .wrap:focus-within .bubble {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+ .wrap[data-open] .bubble {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.bubble-text {
+  margin: 0;
+  font-family: $font-sans;
+  font-size: $text-sm;
+  line-height: 1.4;
+  color: $color-text;
+}
+
+.bubble-email {
+  pointer-events: auto;
+  font-family: $font-mono;
+  font-size: $text-sm;
+  color: $color-accent;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
 </style>
+
+<script>
+  const wraps = document.querySelectorAll<HTMLElement>('[data-interactive]');
+  const isTouch = !window.matchMedia('(hover: hover)').matches;
+
+  if (isTouch) {
+    wraps.forEach((wrap) => {
+      wrap.addEventListener('click', (e) => {
+        // Allow the email link to fire normally
+        if ((e.target as HTMLElement).closest('[href^="mailto:"]')) return;
+        e.stopPropagation();
+        wrap.toggleAttribute('data-open');
+      });
+    });
+
+    document.addEventListener('click', () => {
+      wraps.forEach((wrap) => wrap.removeAttribute('data-open'));
+    });
+  }
+</script>
